@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { mutation } from 'react-apollo';
+import { mutation, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import Router from 'next/router';
 import Form from './styles/Form';
 import formatMoney from '../lib/formatMoney';
+import Error from './ErrorMessage';
+
 
 const CREATE_ITEM_MUTATION = gql`
     mutation CREATE_ITEM_MUTATION (
@@ -39,11 +42,25 @@ class CreateItem extends Component {
     }
     render() {
         return (
-            <Form onSubmit={(e) =>{
+            <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
+                {(createItem, {loading, error, called, data}) => (
+
+                
+            <Form onSubmit={async (e) =>{
+                //stop the from from submitting
                 e.preventDefault();
-                console.log(this.state);
-            }}>
-                <fieldset>
+                //call the mutation
+                const res = await createItem();
+                //redirect to the single item page
+                console.log(res);
+                Router.push({
+                    pathname: '/item',
+                    query: { id:res.data.createItem.id },
+                });
+            }}
+            >
+                <Error error={error}/>
+                <fieldset disabled={loading} aria-busy={loading}>
                     <label htmlFor="title">
                         Title
                         <input type="text" id="title" name="title" placeholder="Title" required 
@@ -69,6 +86,8 @@ class CreateItem extends Component {
                     <button type="submit">Submit</button>
                 </fieldset>
             </Form>
+             )}
+            </Mutation>
         );
     }
 }
