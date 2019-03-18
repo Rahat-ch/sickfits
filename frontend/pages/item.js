@@ -1,9 +1,9 @@
-
+import SingleItem from '../components/SingleItem';
 
 const Item = props => (
     <div>
         {/* <SingleItem id={props.query.id} /> */}
-        Hi I am an item
+      <SingleItem id={props.query.id} />
   </div>
 );
 
