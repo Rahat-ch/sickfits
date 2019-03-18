@@ -24,14 +24,41 @@ const Pagination = props => (
             const count = data.itemsConnection.aggregate.count;
             const pages = Math.ceil(count / perPage);
             const page = props.page;
-            return(
-                <PaginationStyles>
-                    <Head>
-                        <title>SupMemes - Page {page} of {pages}</title>
-                    </Head>
-                    <p> Page {page} of {pages}</p>
-                </PaginationStyles>
-        )}}
+            return (
+              <PaginationStyles>
+                <Head>
+                  <title>
+                    SupMemes - Page {page} of {pages}
+                  </title>
+                </Head>
+                <Link
+                  prefetch
+                  href={{
+                    pathname: "items",
+                    query: { page: page - 1 }
+                  }}
+                >
+                  <a className="prev" aria-disabled={page <= 1}>
+                    ← Prev
+                  </a>
+                </Link>
+                <p>
+                  Page {page} of {pages}
+                </p>
+                <p>{count} Items total</p>
+                <Link
+                  prefetch
+                  href={{
+                    pathname: "items",
+                    query: { page: page + 1 }
+                  }}
+                >
+                  <a className="prev" aria-disabled={page >= pages}>
+                    Next →
+                  </a>
+                </Link>
+              </PaginationStyles>
+            );}}
         </Query>
 );
 
