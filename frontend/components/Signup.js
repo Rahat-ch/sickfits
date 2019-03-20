@@ -4,6 +4,16 @@ import gql from 'graphql-tag';
 import Form from './styles/Form';
 import Error from './ErrorMessage';
 
+const SIGNUP_MUTATION = gql`
+mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
+    signup(email: $email, name: $name, password: $password) {
+        id
+        email
+        name
+    }
+}
+`
+
 class Signup extends Component {
     state ={
         name: '',
@@ -15,9 +25,16 @@ class Signup extends Component {
     }
     render() {
         return (
-            <Form>
-                <fieldset>
+            <Mutation mutation={SIGNUP_MUTATION} variables={this.state}>
+                {(signup, { error, loading }) => {
+                return(
+                <Form method="post" onSubmit={e => {
+                    e.preventDefault();
+                    signup();
+                }}>
+                <fieldset disabled={loading} aria-busy={loading}>
                     <h2>Sign up for an Account</h2>
+                    <Error error={error} />
                     <label htmlFor="email">
                     Email
                     <input 
@@ -50,7 +67,9 @@ class Signup extends Component {
                     </label>
                     <button type="submit">Sign up!</button>
                 </fieldset>
-            </Form>
+            </Form>)
+                }}
+            </Mutation>
         );
     }
 }
