@@ -32,7 +32,7 @@ class Signin extends Component {
             refetchQueries={[
                 { query: CURRENT_USER_QUERY, }]}
             >
-                {(signin, { error, loading }) => {
+                {(signin, { error, loading, called }) => {
                 return(
                 <Form method="post" onSubmit={async e => {
                     e.preventDefault();
@@ -43,6 +43,7 @@ class Signin extends Component {
                 <fieldset disabled={loading} aria-busy={loading}>
                     <h2>Sign into your account</h2>
                     <Error error={error} />
+                            {!error && !loading && called && <p>Success you are now logged in!</p>}
                     <label htmlFor="email">
                     Email
                     <input 
